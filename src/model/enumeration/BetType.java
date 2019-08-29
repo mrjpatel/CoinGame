@@ -10,25 +10,50 @@ import model.interfaces.Player;
  * @author Caspar Ryan
  * 
  */
-public enum BetType
-{
-      COIN1
-      {
-         @Override
-         public void applyWinLoss(Player player, CoinPair spinnerResult)
-         {
-            // TODO implementation
-         }
-      },
-      
-      // TODO finish this class with other enum constants
-   
-      /**
-       * This method is to be overridden for each bet type<br>
-       * see assignment specification for betting odds and how win/loss is applied
-       * 
-       * @param player - the player to apply the win/loss points balance adjustment
-       * @param spinnerResult - the CoinPair result of the spinner to compare to
-       */
-      public abstract void applyWinLoss(Player player, CoinPair spinnerResult);
+public enum BetType {
+	COIN1 {
+		@Override
+		public void applyWinLoss(Player player, CoinPair spinnerResult) {
+			// TODO implementation
+			System.out.println("Test Player: " + player.getPlayerName() +" | " + 
+			player.getBet());
+		}
+	},
+	COIN2 {
+
+		@Override
+		public void applyWinLoss(Player player, CoinPair spinnerResult) {
+			// TODO Auto-generated method stub
+
+		}
+
+	},
+	BOTH {
+
+		@Override
+		public void applyWinLoss(Player player, CoinPair spinnerResult) {
+			// TODO Auto-generated method stub
+
+		}
+
+	},
+	NO_BET {
+
+		@Override
+		public void applyWinLoss(Player player, CoinPair spinnerResult) {
+			// TODO Auto-generated method stub
+
+		}
+
+	};
+
+	/**
+	 * This method is to be overridden for each bet type<br>
+	 * see assignment specification for betting odds and how win/loss is applied
+	 * 
+	 * @param player        - the player to apply the win/loss points balance
+	 *                      adjustment
+	 * @param spinnerResult - the CoinPair result of the spinner to compare to
+	 */
+	public abstract void applyWinLoss(Player player, CoinPair spinnerResult);
 }

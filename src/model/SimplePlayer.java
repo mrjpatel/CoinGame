@@ -19,31 +19,24 @@ public class SimplePlayer implements Player {
 	
 	private String playerId;
 	
-	private int playerPoints;
+	private int initialPoints;
 	
 	private BetType betType;
 	
 	private int bet;
-	
+
 	private CoinPair coinPair;
 	
-//	/**
-//	 * Constructor
-//	 */
-//	public SimplePlayer() {
-//		// TODO Auto-generated constructor stub
-//	}
-
 	/**
 	 * Constructor, Initialises Simple Player
 	 * @param playerId
 	 * @param playerName
-	 * @param int1
+	 * @param initialPoints
 	 */
-	public SimplePlayer(String playerId, String playerName, int int1) {
+	public SimplePlayer(String playerId, String playerName, int initialPoints) {
 		this.playerId = playerId;
 		this.playerName = playerName;
-//		this.playerPoints = playerPoints;
+		this.initialPoints = initialPoints;
 	}
 
 	@Override
@@ -58,12 +51,12 @@ public class SimplePlayer implements Player {
 
 	@Override
 	public int getPoints() {
-		return this.playerPoints;
+		return this.initialPoints;
 	}
 
 	@Override
 	public void setPoints(int points) {
-		this.playerPoints = points;
+		this.initialPoints = points;
 	}
 
 	@Override
@@ -73,9 +66,7 @@ public class SimplePlayer implements Player {
 
 	@Override
 	public boolean setBet(int bet) {
-		// TODO JAPAN to Check the logic of this implementation
-		resetBet();
-		if(bet > 0 && this.playerPoints >= bet) {
+		if(bet > 0 && this.initialPoints >= bet) {
 			return true;
 		}
 		return false;
@@ -109,7 +100,16 @@ public class SimplePlayer implements Player {
 
 	@Override
 	public void setResult(CoinPair coinPair) {
+		//TODO fix this if need be. DO I flip this?
 		this.coinPair = coinPair;
+	}
+	
+	@Override
+	public String toString() {
+		//TODO: fix this
+		return "Player: id=" + this.playerId + ", name=" + this.playerName + ", bet=" + this.bet + 
+				", betType= " + this.betType + ", points=" + this.initialPoints;
+//		return "Player: id=1, name=The Coin Master, bet=100, betType=COIN1, points=900, RESULT .. Coin 1: Heads, Coin 2: Tails";
 	}
 
 }
