@@ -3,29 +3,34 @@
  */
 package model;
 
-import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
 import model.enumeration.BetType;
-import model.interfaces.Coin;
 import model.interfaces.CoinPair;
 import model.interfaces.GameEngine;
 import model.interfaces.Player;
-import view.GameEngineCallbackImpl;
 import view.interfaces.GameEngineCallback;
 
 /**
- * @author japan
+ * Game EngineImpl is used to manage players, bets, spinners
+ * @author Japan Patel
  *
  */
 public class GameEngineImpl implements GameEngine {
 	
+	/**
+	 * HashMap of all players
+	 */
 	private Map<String, Player> playersMap = null;
 	
+	/**
+	 * Set of all game engine callbacks
+	 */
 	private Set<GameEngineCallback> gameEngineCallbacks;
 	
 	/**
@@ -39,73 +44,63 @@ public class GameEngineImpl implements GameEngine {
 	@Override
 	public void spinPlayer(Player player, int initialDelay1, int finalDelay1, int delayIncrement1, int initialDelay2,
 			int finalDelay2, int delayIncrement2) throws IllegalArgumentException {
-		//use delay1 for both coins A1: 
-
-		CoinPair coinPair = new CoinPairImpl();
 		
-		int i = initialDelay1;
-		while(i < finalDelay1) {
-			if(i < finalDelay1) {
-				coinPair.getCoin1().flip();
-				coinPair.getCoin2().flip();
-				i += delayIncrement1;
-				for(GameEngineCallback callback: gameEngineCallbacks) {
-					callback.playerCoinUpdate(player, coinPair.getCoin1(), this);
-					callback.playerCoinUpdate(player, coinPair.getCoin2(), this);
-				}
+		checkDelayValidity(initialDelay1, finalDelay1, delayIncrement1);
+		CoinPair coinPair = new CoinPairImpl();
+		int currentDelay = initialDelay1;
+		
+		while(currentDelay < finalDelay1) {
+			flipCoins(coinPair);
+			sleep(delayIncrement1);
+			currentDelay += delayIncrement1;
+			for(GameEngineCallback callback: gameEngineCallbacks) {
+				callback.playerCoinUpdate(player, coinPair.getCoin1(), this);
+				callback.playerCoinUpdate(player, coinPair.getCoin2(), this);
 			}
 		}
 		
 		for(GameEngineCallback callback: gameEngineCallbacks) {		
 			callback.playerResult(player, coinPair, this);
 		}
-		
 		player.setResult(coinPair);
 	}
-
+	
+	
 	@Override
 	public void spinSpinner(int initialDelay1, int finalDelay1, int delayIncrement1, int initialDelay2, int finalDelay2,
 			int delayIncrement2) throws IllegalArgumentException {
-		
+		checkDelayValidity(initialDelay1, finalDelay1, delayIncrement1);
 		CoinPair coinPair = new CoinPairImpl();
-		int i = initialDelay1;
+		int currentDelay = initialDelay1;
 		
-		while(i < finalDelay1) {
-			if(i < finalDelay1) {
-				coinPair.getCoin1().flip();
-				coinPair.getCoin2().flip();
-				i += delayIncrement1;
-				try {
-					Thread.sleep(delayIncrement1);
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				}
-				for(GameEngineCallback callback: gameEngineCallbacks) {
-					callback.spinnerCoinUpdate(coinPair.getCoin1(), this);
-					callback.spinnerCoinUpdate(coinPair.getCoin2(), this);
-				}
+		while(currentDelay < finalDelay1) {
+			flipCoins(coinPair);
+			sleep(delayIncrement1);
+			currentDelay += delayIncrement1;
+			for(GameEngineCallback callback: gameEngineCallbacks) {
+				callback.spinnerCoinUpdate(coinPair.getCoin1(), this);
+				callback.spinnerCoinUpdate(coinPair.getCoin2(), this);
 			}
 		}
 		
+		applyBetResults(coinPair);
 		for(GameEngineCallback callback: gameEngineCallbacks) {		
 			callback.spinnerResult(coinPair, this);
 		}
-		
-		applyBetResults(coinPair);
 	}
 
 	@Override
 	public void applyBetResults(CoinPair spinnerResult) {
-		System.out.println("JP TEST");
 		for(Player player : playersMap.values()) {
 			player.getBetType().applyWinLoss(player, spinnerResult);
 		}
-		
 	}
 
 	@Override
 	public void addPlayer(Player player) {
-		playersMap.put(player.getPlayerId(), player);
+		if(player != null) {
+			playersMap.put(player.getPlayerId(), player);	
+		}
 	}
 
 	@Override
@@ -138,18 +133,54 @@ public class GameEngineImpl implements GameEngine {
 
 	@Override
 	public Collection<Player> getAllPlayers() {
-		return new ArrayList<Player>(playersMap.values());
+		return Collections.unmodifiableCollection(playersMap.values());
 	}
 
 	@Override
 	public boolean placeBet(Player player, int bet, BetType betType) {
-		//TODO check implementation
 		if(player.setBet(bet)) {
 			player.setBetType(betType);
-//			System.out.println("JP TEST: " + player.getPlayerName() + player.getBetType() + player.getBet());
 			return true;
 		}
 		return false;
+	}
+	
+	/**
+	 * Sleeps the Thread for given time.
+	 * @param millis milliseconds (ms)
+	 */
+	private void sleep(int millis) {
+		try {
+			Thread.sleep(millis);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	/**
+	 * Flips Coin 1 and Coin 2
+	 * @param coinPair Coin Pair instance
+	 */
+	private void flipCoins(CoinPair coinPair) {
+		coinPair.getCoin1().flip();
+		coinPair.getCoin2().flip();
+	}
+	
+	/**
+	 *  IllegalArgumentException thrown when: <UL>
+    * <LI> if the delay params are < 0
+    * <LI> the finalDelay < initialDelay
+    * <LI> the delayIncrement > (finalDelay - initialDelay)
+    * </UL>
+	 * @param initialDelay Initial Delay
+	 * @param finalDelay Final Delay
+	 * @param delayIncrement Delay Increment
+	 */
+	private void checkDelayValidity(int initialDelay, int finalDelay, int delayIncrement) {
+		if(initialDelay < 0 || finalDelay < 0 || delayIncrement <= 0 || finalDelay < initialDelay || 
+				delayIncrement > (finalDelay - initialDelay)) {
+			throw new IllegalArgumentException("Invalid delays passed for spinners");
+		}
 	}
 
 }

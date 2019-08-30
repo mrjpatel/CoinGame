@@ -8,35 +8,57 @@ import model.interfaces.CoinPair;
 import model.interfaces.Player;
 
 /**
- * Simple Player Implementation
+ * Simple Player Implementation.
+ * Holds Player information.
  * 
  * @author Japan Patel
  */
 public class SimplePlayer implements Player {
 
-	
+	/**
+	 * Player's Name
+	 */
 	private String playerName;
 	
+	/**
+	 * Player's Id
+	 */
 	private String playerId;
 	
-	private int initialPoints;
+	/**
+	 * Player's Points
+	 */
+	private int playerPoints;
 	
+	/**
+	 * Player's Bet Type
+	 */
 	private BetType betType;
 	
+	/**
+	 * Player's bet amount
+	 */
 	private int bet;
 
+	/**
+	 * Player's Coin Pair (Coin1 and Coin2)
+	 */
 	private CoinPair coinPair;
 	
 	/**
-	 * Constructor, Initialises Simple Player
-	 * @param playerId
-	 * @param playerName
-	 * @param initialPoints
+	 * Constructor, Initializes Simple Player
+	 * @param playerId Player ID
+	 * @param playerName Player Name
+	 * @param initialPoints Initial Points 
 	 */
 	public SimplePlayer(String playerId, String playerName, int initialPoints) {
+		if (playerId == null || playerName == null) {
+			throw new IllegalArgumentException("Invalid playerID or Player name passed when creating players");
+		}
+		
 		this.playerId = playerId;
 		this.playerName = playerName;
-		this.initialPoints = initialPoints;
+		this.playerPoints = initialPoints;
 	}
 
 	@Override
@@ -51,12 +73,12 @@ public class SimplePlayer implements Player {
 
 	@Override
 	public int getPoints() {
-		return this.initialPoints;
+		return this.playerPoints;
 	}
 
 	@Override
 	public void setPoints(int points) {
-		this.initialPoints = points;
+		this.playerPoints = points;
 	}
 
 	@Override
@@ -66,7 +88,7 @@ public class SimplePlayer implements Player {
 
 	@Override
 	public boolean setBet(int bet) {
-		if(bet > 0 && this.initialPoints >= bet) {
+		if(bet > 0 && this.playerPoints >= bet) {
 			this.bet = bet;
 			return true;
 		}
@@ -91,7 +113,7 @@ public class SimplePlayer implements Player {
 
 	@Override
 	public void resetBet() {
-		this.setBet(0);
+		this.bet = 0;
 		this.setBetType(BetType.NO_BET);
 	}
 
@@ -102,16 +124,14 @@ public class SimplePlayer implements Player {
 
 	@Override
 	public void setResult(CoinPair coinPair) {
-		//TODO fix this if need be. DO I flip this?
 		this.coinPair = coinPair;
 	}
 	
 	@Override
 	public String toString() {
-		//TODO: fix this
-		return "Player: id=" + this.playerId + ", name=" + this.playerName + ", bet=" + this.bet + 
-				", betType= " + this.betType + ", points=" + this.initialPoints;
-//		return "Player: id=1, name=The Coin Master, bet=100, betType=COIN1, points=900, RESULT .. Coin 1: Heads, Coin 2: Tails";
+		return "Player: id=" + this.playerId + ", name=" + this.playerName + ", bet=" + this.bet +
+				", betType= " + this.betType + ", points=" + this.playerPoints + ", RESULT .. " +
+				coinPair.toString();
 	}
 
 }

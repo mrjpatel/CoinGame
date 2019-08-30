@@ -7,21 +7,35 @@ import model.interfaces.Coin;
 import model.interfaces.CoinPair;
 
 /**
- * @author japan
+ * Coin Pair Class holds Coin 1 and Coin 2 information.
+ * @author Japan Patel
  *
  */
 public class CoinPairImpl implements CoinPair {
 
+	/**
+	 * Coin 1
+	 */
 	private Coin coin1;
 	
+	/**
+	 * Coin 2
+	 */
 	private Coin coin2;
 	
+	/**
+	 * Coin 1 number
+	 */
 	private int coin1Number = 1;
 	
+	/**
+	 * Coin 2 number
+	 */
 	private int coin2Number = 2;
 	
 	/**
-	 * Constructor
+	 * Coin Pair Implementation Constructor.
+	 * Initializes Coin1 and Coin2
 	 */
 	public CoinPairImpl() {
 		coin1 = new CoinImpl(coin1Number);
@@ -40,13 +54,13 @@ public class CoinPairImpl implements CoinPair {
 	
 	@Override
    public String toString() {
-		return "Coin 1: " + coin1.getFace().toString() + ", Coin 2: " + coin2.getFace().toString();
+		return coin1.toString() + ", " + coin2.toString();
 	}
 
 	@Override
 	public boolean equals(CoinPair coinPair) {
-		//TODO Fix this
-		if(this.coin1.equals(coinPair.getCoin1()) && this.coin2.equals(coinPair.getCoin2())) {
+		if(this.coin1.equals(coinPair.getCoin1()) && 
+				this.coin2.equals(coinPair.getCoin2())) {
 			return true;
 		}
 		return false;
@@ -62,7 +76,6 @@ public class CoinPairImpl implements CoinPair {
 
    @Override
    public int hashCode() {
-	   //TODO fix this
 	   return coin1.hashCode() + coin2.hashCode();
    }
 

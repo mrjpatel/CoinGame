@@ -12,39 +12,60 @@ import model.interfaces.Player;
  */
 public enum BetType {
 	COIN1 {
+		
 		@Override
 		public void applyWinLoss(Player player, CoinPair spinnerResult) {
-			// TODO implementation
-			System.out.println("Test Player: " + player.getPlayerName() +" | " + 
-			player.getBet());
+			int playerCurrentPoints = player.getPoints();
+			int playerNewPoints = 0;
+			
+			if(player.getResult().getCoin1().equals(spinnerResult.getCoin1())) {
+				playerNewPoints = playerCurrentPoints + player.getBet();
+			}
+			else {
+				playerNewPoints = playerCurrentPoints - player.getBet();
+			}
+			player.setPoints(playerNewPoints);
 		}
 	},
 	COIN2 {
 
 		@Override
 		public void applyWinLoss(Player player, CoinPair spinnerResult) {
-			// TODO Auto-generated method stub
-
+			int playerCurrentPoints = player.getPoints();
+			int playerNewPoints = 0;
+			
+			if(player.getResult().getCoin2().equals(spinnerResult.getCoin2())) {
+				playerNewPoints = playerCurrentPoints + player.getBet();
+			}
+			else {
+				playerNewPoints = playerCurrentPoints - player.getBet();
+			}
+			player.setPoints(playerNewPoints);
 		}
-
 	},
 	BOTH {
 
 		@Override
 		public void applyWinLoss(Player player, CoinPair spinnerResult) {
-			// TODO Auto-generated method stub
-
+			int playerCurrentPoints = player.getPoints();
+			int playerNewPoints = 0;
+			
+			if(player.getResult().getCoin1().equals(spinnerResult.getCoin1()) &&
+					player.getResult().getCoin2().equals(spinnerResult.getCoin2())) {
+				playerNewPoints = playerCurrentPoints + (player.getBet() * 2);
+			}
+			else {
+				playerNewPoints = playerCurrentPoints - player.getBet();
+			}
+			player.setPoints(playerNewPoints);
 		}
-
 	},
 	NO_BET {
 
 		@Override
 		public void applyWinLoss(Player player, CoinPair spinnerResult) {
-			// TODO Auto-generated method stub
-
+			// no implementation required
 		}
-
 	};
 
 	/**

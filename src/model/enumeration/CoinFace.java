@@ -8,4 +8,9 @@ package model.enumeration;
 public enum CoinFace
 {
    HEADS, TAILS;
+	
+	@Override
+    public String toString() {
+		return name().toLowerCase().substring(0, 1).toUpperCase() + name().toLowerCase().substring(1);
+    }
 }
