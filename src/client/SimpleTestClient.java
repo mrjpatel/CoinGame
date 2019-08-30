@@ -52,7 +52,9 @@ public class SimpleTestClient {
 			// mod with BetType length so we always stay in range even if num players
 			// increases
 			// NOTE: we are passing a different BetType each time!
-			gameEngine.placeBet(player, 100, BetType.values()[enumOrdinal++ % BetType.values().length]);
+			BetType betType = BetType.values()[enumOrdinal++ % BetType.values().length];
+			System.out.println("JPTEST1: " + betType);
+			gameEngine.placeBet(player, 100, betType);
 			gameEngine.spinPlayer(player, 100, 1000, 100, 50, 500, 50);
 		}
 

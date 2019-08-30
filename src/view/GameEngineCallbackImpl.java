@@ -28,12 +28,12 @@ public class GameEngineCallbackImpl implements GameEngineCallback {
 
 	public void playerCoinUpdate(Player player, Coin coin, GameEngine engine) {
 		// intermediate results logged at Level.FINE
-		logger.log(Level.FINE, player.getPlayerName() + " coin " + coin.getNumber() + " flipped to " + coin.getFace());
+		logger.log(Level.FINE, player.getPlayerName() + " coin " + coin.getNumber() + " flipped to " + coin.getFace().toString());
 		// TODO: complete this method to log intermediate results
 	}
 
 	public void playerResult(Player player, CoinPair coinPair, GameEngine engine) {
-		logger.log(Level.INFO, player.getPlayerName() + ", final result=Coin 1: " + coinPair.getCoin1().getFace() + ", Coin 2: " + coinPair.getCoin2().getFace());
+		logger.log(Level.INFO, player.getPlayerName() + ", final result=Coin 1: " + coinPair.getCoin1().getFace() + ", Coin 2: " + coinPair.getCoin2().getFace().toString());
 		// TODO: complete this method to log results
 	}
 

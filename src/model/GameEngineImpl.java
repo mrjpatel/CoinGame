@@ -28,22 +28,17 @@ public class GameEngineImpl implements GameEngine {
 	
 	private Set<GameEngineCallback> gameEngineCallbacks;
 	
-//	private GameEngineCallback gameEngineCallback;
-	
 	/**
 	 * Constructor
 	 */
 	public GameEngineImpl() {
 		playersMap = new HashMap<String, Player>();
 		gameEngineCallbacks = new HashSet<GameEngineCallback>();
-		
-//		gameEngineCallback = new GameEngineCallbackImpl();
 	}
 
 	@Override
 	public void spinPlayer(Player player, int initialDelay1, int finalDelay1, int delayIncrement1, int initialDelay2,
 			int finalDelay2, int delayIncrement2) throws IllegalArgumentException {
-		// TODO Auto-generated method stub
 		//use delay1 for both coins A1: 
 
 		CoinPair coinPair = new CoinPairImpl();
@@ -64,6 +59,8 @@ public class GameEngineImpl implements GameEngine {
 		for(GameEngineCallback callback: gameEngineCallbacks) {		
 			callback.playerResult(player, coinPair, this);
 		}
+		
+		player.setResult(coinPair);
 	}
 
 	@Override
@@ -93,6 +90,8 @@ public class GameEngineImpl implements GameEngine {
 		for(GameEngineCallback callback: gameEngineCallbacks) {		
 			callback.spinnerResult(coinPair, this);
 		}
+		
+		applyBetResults(coinPair);
 	}
 
 	@Override
@@ -147,6 +146,7 @@ public class GameEngineImpl implements GameEngine {
 		//TODO check implementation
 		if(player.setBet(bet)) {
 			player.setBetType(betType);
+//			System.out.println("JP TEST: " + player.getPlayerName() + player.getBetType() + player.getBet());
 			return true;
 		}
 		return false;
