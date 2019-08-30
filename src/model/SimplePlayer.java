@@ -53,7 +53,7 @@ public class SimplePlayer implements Player {
 	 */
 	public SimplePlayer(String playerId, String playerName, int initialPoints) {
 		if (playerId == null || playerName == null) {
-			throw new IllegalArgumentException();
+			throw new IllegalArgumentException("Invalid playerID or Player name passed when creating players");
 		}
 		
 		this.playerId = playerId;

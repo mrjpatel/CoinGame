@@ -44,6 +44,8 @@ public class GameEngineImpl implements GameEngine {
 	@Override
 	public void spinPlayer(Player player, int initialDelay1, int finalDelay1, int delayIncrement1, int initialDelay2,
 			int finalDelay2, int delayIncrement2) throws IllegalArgumentException {
+		
+		checkDelayValidity(initialDelay1, finalDelay1, delayIncrement1);
 		CoinPair coinPair = new CoinPairImpl();
 		int currentDelay = initialDelay1;
 		
@@ -62,10 +64,12 @@ public class GameEngineImpl implements GameEngine {
 		}
 		player.setResult(coinPair);
 	}
-
+	
+	
 	@Override
 	public void spinSpinner(int initialDelay1, int finalDelay1, int delayIncrement1, int initialDelay2, int finalDelay2,
 			int delayIncrement2) throws IllegalArgumentException {
+		checkDelayValidity(initialDelay1, finalDelay1, delayIncrement1);
 		CoinPair coinPair = new CoinPairImpl();
 		int currentDelay = initialDelay1;
 		
@@ -160,6 +164,23 @@ public class GameEngineImpl implements GameEngine {
 	private void flipCoins(CoinPair coinPair) {
 		coinPair.getCoin1().flip();
 		coinPair.getCoin2().flip();
+	}
+	
+	/**
+	 *  IllegalArgumentException thrown when: <UL>
+    * <LI> if the delay params are < 0
+    * <LI> the finalDelay < initialDelay
+    * <LI> the delayIncrement > (finalDelay - initialDelay)
+    * </UL>
+	 * @param initialDelay Initial Delay
+	 * @param finalDelay Final Delay
+	 * @param delayIncrement Delay Increment
+	 */
+	private void checkDelayValidity(int initialDelay, int finalDelay, int delayIncrement) {
+		if(initialDelay < 0 || finalDelay < 0 || delayIncrement <= 0 || finalDelay < initialDelay || 
+				delayIncrement > (finalDelay - initialDelay)) {
+			throw new IllegalArgumentException("Invalid delays passed for spinners");
+		}
 	}
 
 }
