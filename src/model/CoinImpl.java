@@ -3,23 +3,31 @@
  */
 package model;
 
-import java.util.Random;
-
 import model.enumeration.CoinFace;
 import model.interfaces.Coin;
 
 /**
- * @author japan
+ * Coin Implementation. 
+ * Holds Coin Number and Coin Face
+ * and is used to flip coin.
+ * @author Japan Patel
  *
  */
 public class CoinImpl implements Coin {
 
+	/**
+	 * The upward/visible face of the coin 
+	 */
 	private CoinFace coinFace;
 	
+	/**
+	 * Coin Number
+	 */
 	private int coinNumber;
 	
 	/**
-	 * 
+	 * Coin Implementation Constructor.
+	 * Initializes coin number and randomly sets coin face
 	 */
 	public CoinImpl(int coinNumber) {
 		this.coinNumber = coinNumber;
@@ -70,17 +78,12 @@ public class CoinImpl implements Coin {
 	}
 	
 	/**
-	 * Gets Random coin face
-	 * @return CoinFace
+	 * Returns a Random coin face
+	 * @return CoinFace The upward/visible face of the coin (Heads/Tails)
 	 */
 	private CoinFace getRandomCoinFace() {
-		int max = 3;
-		int min = 1;
-		
-		Random random = new Random();
-		int result = random.nextInt(max - min) + min;
-		
-		if(result == 1) {
+		double random = Math.random();
+		if(random < 0.5) {
 			return CoinFace.HEADS;
 		}
 		return CoinFace.TAILS;
